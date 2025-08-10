@@ -1,23 +1,20 @@
 "use client";
-import { blog_data, assets } from "@/Assets/assets";
+import { assets } from "@/Assets/assets";
 import Footer from "@/Components/Footer";
 import { Blog } from "@/Types/Blog";
-import Image from "next/image";
+import axios from "axios";
+import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const BlogPage = ({ params }) => {
   const [data, setData] = useState<Blog>();
 
-  const fetchBlogData = () => {
-    for (let i = 0; i < blog_data.length; i++) {
-      if (Number(params.id) === blog_data[i].id) {
-        setData(blog_data[i]);
-        console.log(blog_data[i]);
-
-        break;
-      }
-    }
+  const fetchBlogData = async () => {
+    const response = await axios.get("/api/blog", {
+      params: { id: params.id },
+    });
+    setData(response.data);
   };
 
   useEffect(() => {
@@ -59,74 +56,15 @@ const BlogPage = ({ params }) => {
       <div className="mx-5 max-w-[800px] md:mx-auto mt-[-100px] mb-10">
         <Image
           className="border-4 border-white"
-          src={data.image}
+          src={data.image as StaticImageData}
           alt=""
           width={1280}
           height={720}
         />
-        <h1 className="my-8 text-[26px] font-semibold">Introduction:</h1>
-        <p>{data.description}</p>
-        <h3 className="my-5 text-[18px] font-semibold">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet
-          dolor magnam iure eligendi, nam praesentium, cumque qui distinctio
-          voluptatum illo maxime iste ullam dolores dicta laboriosam. Enim ea
-          quidem quisquam.
-        </h3>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
-        <h3 className="my-5 text-[18px] font-semibold">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet
-          dolor magnam iure eligendi, nam praesentium, cumque qui distinctio
-          voluptatum illo maxime iste ullam dolores dicta laboriosam. Enim ea
-          quidem quisquam.
-        </h3>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
-        <h3 className="my-5 text-[18px] font-semibold">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eveniet
-          dolor magnam iure eligendi, nam praesentium, cumque qui distinctio
-          voluptatum illo maxime iste ullam dolores dicta laboriosam. Enim ea
-          quidem quisquam.
-        </h3>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
-        <h3 className="my-5 text-[18px] font-semibold">Conclusion</h3>
-        <p className="my-3">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut, delectus?
-          Quae molestias dolor facilis placeat possimus voluptatem, quod
-          exercitationem esse, necessitatibus odit maiores, eos distinctio
-          molestiae architecto eveniet recusandae voluptatibus.
-        </p>
+        <div
+          className="blog-content"
+          dangerouslySetInnerHTML={{ __html: data.description }}
+        ></div>
         <div className="my-24">
           <p className="text-black font-semibold my-4">
             Share this article on social media

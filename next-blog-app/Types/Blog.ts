@@ -1,12 +1,19 @@
 import { StaticImageData } from "next/image";
 
 export interface Blog {
-  id: number;
+  id?: number;
+  _id?: number;
   title: string;
   description: string;
-  image: StaticImageData;
-  date: number;
+  image?: StaticImageData;
+  date?: number;
   category: string;
   author: string;
-  author_img: StaticImageData;
+  author_img: StaticImageData | string;
+}
+
+export interface Email {
+  _id?: number;
+  email: string;
+  date?: number;
 }

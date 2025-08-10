@@ -1,9 +1,21 @@
-import { blog_data } from "@/Assets/assets";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BlogItem from "./BlogItem";
+import { Blog } from "@/Types/Blog";
+import axios from "axios";
+import { StaticImageData } from "next/image";
 
 const BlogList = () => {
   const [menu, setMenu] = useState<string>("All");
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+
+  const fetchBlogs = async () => {
+    const response = await axios.get("/api/blog");
+    setBlogs(response.data.blogs);
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
   return (
     <div>
@@ -50,16 +62,16 @@ const BlogList = () => {
         </button>
       </div>
       <div className="flex flex-wrap justify-around gap-1 gap-y-10 mb-16 xl:mx-24">
-        {blog_data
+        {blogs
           .filter((blog) => menu === "All" || blog.category === menu)
           .map((blog) => (
             <BlogItem
               key={blog.id}
-              image={blog.image}
+              image={blog.image as StaticImageData}
               category={blog.category}
               title={blog.title}
               description={blog.description}
-              id={blog.id}
+              id={blog.id as number}
             />
           ))}
       </div>
